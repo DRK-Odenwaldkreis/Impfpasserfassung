@@ -1,0 +1,21 @@
+# This file is part of Impfpasserfassung.
+
+## Monthly
+
+
+#Weekly jobs
+# m h  dom mon dow   command
+59 23 * * 6 /home/webservice_impf/Impfpasserfassung/WeeklyJobs/clean.sh >> /home/webservice_impf/Logs/clean.log 2>&1
+45 23 * * 6 /home/webservice_impf/Impfpasserfassung/WeeklyJobs/clean_tickets.sh >> /home/webservice_impf/Logs/clean.log 2>&1
+
+############# DAILY JOBS
+58 23 * * * /home/webservice_impf/Impfpasserfassung/DailyJobs/reporting.sh >> /home/webservice_impf/Logs/TagesreportJob.log 2>&1
+55 23 * * * /home/webservice_impf/Impfpasserfassung/DailyJobs/accounting.sh >> /home/webservice_impf/Logs/accounting.log 2>&1
+0 8 * * * /home/webservice_impf/Impfpasserfassung/DailyJobs/reminding.sh >> /home/webservice_impf/Logs/reminder.log 2>&1
+50 23 * * * /home/webservice_impf/Impfpasserfassung/WeeklyJobs/clean_reports.sh >> /home/webservice_impf/Logs/clean.log 2>&1
+51 23 * * * /home/webservice_impf/Impfpasserfassung/WeeklyJobs/clean.sh >> /home/webservice_impf/Logs/clean.log 2>&1
+59 23 * * * cd /home/webservice_impf/Impfpasserfassung/NightlyAutoClean && python3 job.py >> /home/webservice_impf/Logs/clean.log 2>&1
+
+############# Regular Jobs
+
+*/10 * * * * cd /home/webservice_impf/Impfpasserfassung/TicketGeneration && python3 job.py >> ../../Logs/ticket.log 2>&1
