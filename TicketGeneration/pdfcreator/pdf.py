@@ -20,7 +20,6 @@ from utils.slot import get_slot_time
 FreeSans = '../utils/Schriftart/FreeSans.ttf'
 FreeSansBold = '../utils/Schriftart/FreeSansBold.ttf'
 Logo = '../utils/logo.png'
-Logo2 = '../utils/logo2.png'
 
 class PDFgenerator(FPDF):
 
@@ -31,23 +30,23 @@ class PDFgenerator(FPDF):
 		self.add_font('GNU', 'B', FreeSansBold, uni=True)
 		self.set_font('GNU', 'B', 20)
 		self.cell(10, 30, '', ln=1)
-		self.multi_cell(200, 15, 'Termin-Ticket für die Ausstellung des digitalen Impfnachweises',0, align='C')
+		self.multi_cell(200, 15, 'Termin-Ticket für die Ausstellung des digitalen Impfzertifikats',0, align='C')
 		self.set_font('GNU', '', 20)
 		self.cell(200,15, 'Name: ' + self.nachname + ', ' + self.vorname, ln=1)
 		self.cell(200,15, 'Datum: ' + self.date.strftime("%d.%m.%Y"), ln=1)
 		self.cell(200,15, 'Uhrzeit: ' + str(self.appointment), ln=1)
 		self.cell(200,15, 'Ort:', ln=1)
 		self.multi_cell(0,15, str(self.location), 0)
-		self.qrcode = pyqrcode.create(str(self.code), error='Q')
-		self.qrcode.png('tmp/'+str(self.code) + '.png', scale=6,quiet_zone=4)
-		self.image('tmp/'+ str(self.code) + '.png', y=100,x=140)
+		#self.qrcode = pyqrcode.create(str(self.code), error='Q')
+		#self.qrcode.png('tmp/'+str(self.code) + '.png', scale=6,quiet_zone=4)
+		#self.image('tmp/'+ str(self.code) + '.png', y=100,x=140)
 		self.cell(10, 10, '', ln=1)
 		self.cell(200, 10, '%s' % (self.code), ln=1, align='C')
 		self.cell(10, 15, '', ln=1)
 		self.add_font('GNU', 'B', FreeSansBold, uni=True)
 		self.set_font('GNU', 'B', 12)
 		self.multi_cell(195, 5, 'Bitte halten Sie sich an die geltenden Abstandsregeln. Erscheinen Sie bitte nur, wenn Sie sich gesund fühlen und frei von Symptomen sind.',0, align='C')
-		self.multi_cell(195, 10, 'Bringen Sie zum Test bitte einen gültigen Lichtbildausweis sowie Ihren gelben Impfpass oder einen gültigen Impfnachweis mit.',0, align='C')
+		self.multi_cell(195, 10, 'Bringen Sie zum Test bitte ein gültiges Ausweisdokument sowie Ihren gelben Impfpass oder einen gültigen Impfnachweis mit.',0, align='C')
 		os.remove('tmp/'+str(self.code) + '.png')
 
 	def creatPDF(self,content, location):
