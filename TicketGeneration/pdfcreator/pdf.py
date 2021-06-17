@@ -30,7 +30,7 @@ class PDFgenerator(FPDF):
 		self.add_font('GNU', 'B', FreeSansBold, uni=True)
 		self.set_font('GNU', 'B', 20)
 		self.cell(10, 30, '', ln=1)
-		self.multi_cell(200, 15, 'Termin für die Ausstellung des digitalen Impfzertifikats',0, align='C')
+		self.multi_cell(200, 15, 'Ausstellung eines digitalen Impfnachweises',0, align='C')
 		self.set_font('GNU', '', 20)
 		self.cell(200,15, 'Name: ' + self.nachname + ', ' + self.vorname, ln=1)
 		self.cell(200,15, 'Datum: ' + self.date.strftime("%d.%m.%Y"), ln=1)
@@ -67,7 +67,7 @@ class PDFgenerator(FPDF):
 	def header(self):
 		self.add_font('GNU', '', FreeSans, uni=True)
 		self.set_font('GNU', '', 11)
-		self.image(Logo, x=7, y=10, w=100, h=24, type='PNG')
+		self.image(Logo, x=60, w=110, h=24, type='PNG')
 		self.ln(10)
 
 
