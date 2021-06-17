@@ -11,7 +11,7 @@ from utils.database import Database
 import datetime
 
 logFile = '../../Logs/cleanJob.log'
-logging.basicConfig(filename=logFile, level=logging.INFO,
+logging.basicConfig(filename=logFile,level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('Nightly Auto Clean started on: %s'%datetime.datetime.now())
 logger.info('Starting nightly clean')

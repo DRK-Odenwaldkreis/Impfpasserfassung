@@ -43,14 +43,14 @@ if __name__ == "__main__":
                 token = i[6]
                 date = i[5]
                 ort = i[8]
-                adress = i[9]
+                address = i[9]
                 appointment = get_slot_time(slot,stunde)
-                location = str(ort) + ", " + str(adress)
+                location = str(ort) + ", " + str(address)
                 PDF = PDFgenerator()
                 filename = PDF.creatPDF(i,location)
                 logger.debug('Handing over to sendmail of reminder')
                 url = "https://impfpass-odw.de/registration/index.php?cancel=cancel&t=%s&i=%s" % (token, entry)
-                if send_mail_reminder(mail, date, vorname, nachname, appointment, url, filename):
+                if send_mail_reminder(mail, date, vorname, nachname, appointment,location,filename,url):
                     logger.debug('Mail was succesfully send, closing entry in db')
                     sql = "Update Voranmeldung SET Reminded = 1 WHERE id = %s;" % (entry)
                     DatabaseConnect.update(sql)

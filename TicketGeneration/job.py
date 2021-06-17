@@ -16,7 +16,7 @@ import logging
 
 
 logFile = '../../Logs/ticketGeneration.log'
-logging.basicConfig(filename=logFile,level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('Generating Tickets')
 logger.info('Starting Ticketgeneration')

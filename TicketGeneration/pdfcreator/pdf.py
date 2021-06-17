@@ -30,13 +30,12 @@ class PDFgenerator(FPDF):
 		self.add_font('GNU', 'B', FreeSansBold, uni=True)
 		self.set_font('GNU', 'B', 20)
 		self.cell(10, 30, '', ln=1)
-		self.multi_cell(200, 15, 'Termin-Ticket für die Ausstellung des digitalen Impfzertifikats',0, align='C')
+		self.multi_cell(200, 15, 'Termin für die Ausstellung des digitalen Impfzertifikats',0, align='C')
 		self.set_font('GNU', '', 20)
 		self.cell(200,15, 'Name: ' + self.nachname + ', ' + self.vorname, ln=1)
 		self.cell(200,15, 'Datum: ' + self.date.strftime("%d.%m.%Y"), ln=1)
 		self.cell(200,15, 'Uhrzeit: ' + str(self.appointment), ln=1)
-		self.cell(200,15, 'Ort:', ln=1)
-		self.multi_cell(0,15, str(self.location), 0)
+		self.cell(200,15, 'Ort:' + str(self.location), ln=1)
 		#self.qrcode = pyqrcode.create(str(self.code), error='Q')
 		#self.qrcode.png('tmp/'+str(self.code) + '.png', scale=6,quiet_zone=4)
 		#self.image('tmp/'+ str(self.code) + '.png', y=100,x=140)
@@ -47,7 +46,7 @@ class PDFgenerator(FPDF):
 		self.set_font('GNU', 'B', 12)
 		self.multi_cell(195, 5, 'Bitte halten Sie sich an die geltenden Abstandsregeln. Erscheinen Sie bitte nur, wenn Sie sich gesund fühlen und frei von Symptomen sind.',0, align='C')
 		self.multi_cell(195, 10, 'Bringen Sie zum Test bitte ein gültiges Ausweisdokument sowie Ihren gelben Impfpass oder einen gültigen Impfnachweis mit.',0, align='C')
-		os.remove('tmp/'+str(self.code) + '.png')
+		#os.remove('tmp/'+str(self.code) + '.png')
 
 	def creatPDF(self,content, location):
 		self.code = content[6]
@@ -82,6 +81,5 @@ class PDFgenerator(FPDF):
 		self.set_font('GNU', '', 12)
 		self.multi_cell(195, 5, 'DATENSCHUTZ',0)
 		self.ln(5)
-		self.image(Logo2,x=60,w=110, h=24)
 
 
