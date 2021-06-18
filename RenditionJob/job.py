@@ -27,7 +27,7 @@ if __name__ == "__main__":
             sql = "Select from Vorgang where privateMail_request=1 and Ergebnis != 5 and ((privateMail_lock < 10 and privateMail_lock != 0) or privateMail_lock is NULL) and Teststation = %s;" % (stationID)
         else:
             logger.debug('Checking all stations')
-            sql = "Select from Vorgang where privateMail_request=1 and Ergebnis != 5 and ((privateMail_lock < 10 and privateMail_lock != 0) or privateMail_lock is NULL);"
+            sql = "Select from Vorgang where privateMail_request=1 and docs_complete = 1 and ((privateMail_lock < 10 and privateMail_lock != 0) or privateMail_lock is NULL);"
         DatabaseConnect = Database()
         logger.debug('Checking for new results, using the following query: %s' % (sql))
         content = DatabaseConnect.read_all(sql)
