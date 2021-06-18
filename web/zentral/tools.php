@@ -128,11 +128,12 @@ function S_get_entry_voranmeldung ($Db,$scanevent) {
 }
 
 function S_set_transfer_person_prereg ($Db,$token,$station_id) {
-	$array_data_pre=S_get_multientry($Db,'SELECT id, Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Impfstoff_id FROM Voranmeldung WHERE Token=\''.$token.'\' AND Used=0;');
+	$array_data_pre=S_get_multientry($Db,'SELECT id, Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Erstimpfstoff_id, Zweitimpfstoff_id FROM Voranmeldung WHERE Token=\''.$token.'\' AND Used=0;');
 	$array_data=$array_data_pre[0];
+	if($array_data[10]==NULL) {$array_data[10]=0;}
 	if($array_data[0]>0) {
 		S_set_data($Db,'INSERT INTO Vorgang 
-		(Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Impfstoff_id, reg_type, Teststation) 
+		(Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Erstimpfstoff_id, Zweitimpfstoff_id, reg_type, Teststation) 
 		VALUES 
 		(
 			\''.$array_data[1].'\',
@@ -144,11 +145,12 @@ function S_set_transfer_person_prereg ($Db,$token,$station_id) {
 			\''.$array_data[7].'\',
 			NULLIF(\''.$array_data[8].'\',\'\'),
 			'.$array_data[9].',
+			NULLIF('.$array_data[10].',0),
 			\'PREREG\',
 			'.$station_id.'
 		);');
 
-		S_set_data($Db,'UPDATE Voranmeldung SET Used=1 WHERE Token=\''.$token.'\';');
+		//S_set_data($Db,'UPDATE Voranmeldung SET Used=1 WHERE Token=\''.$token.'\';');
 		$rowid=S_get_entry($Db,'SELECT id FROM Vorgang WHERE Vorname=\''.$array_data[1].'\' AND Nachname=\''.$array_data[2].'\' AND Wohnort=\''.$array_data[3].'\' AND Adresse=\''.$array_data[4].'\' AND Mailadresse=\''.$array_data[5].'\' AND Geburtsdatum=\''.$array_data[6].'\'');
 		return $rowid;
 	} else {
