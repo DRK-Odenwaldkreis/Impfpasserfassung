@@ -27,7 +27,7 @@ class MyPDF(FPDF):
 	def header(self):
 		self.add_font('GNU', '', FreeSans, uni=True)
 		self.set_font('GNU', '', 11)
-		self.cell(40, 10, 'Testzentrum Odenwaldkreis:', ln=1)
+		self.cell(40, 10, 'Impfpasserfassung Odenwaldkreis:', ln=1)
 		self.image(Logo, x=7, y=10, w=100, h=24, type='PNG')
 		self.ln(20)
 
@@ -59,7 +59,7 @@ class PDFgenerator:
 		self.regHours = np.array(self.content[6])
 		self.regMinutes = np.array(self.content[7])
 
-		self.ax[0, 0].set_title("Gesamtanzahl der Tests: %s" % (self.erfassungen))
+		self.ax[0, 0].set_title("Gesamtanzahl der Erfassungen: %s" % (self.erfassungen))
 		
 		#Pi Histogram Alter
 		self.ageArray = np.array(self.gebDates)

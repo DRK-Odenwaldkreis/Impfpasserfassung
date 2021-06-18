@@ -108,8 +108,8 @@ def send_cancel_appointment(recipient, date, vorname, nachname):
             fileContent = f.read()
         messageContent = fileContent.replace('[[DATE]]', date.strftime("%d.%m.%Y")).replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]', str(nachname))
         message.attach(MIMEText(messageContent, 'html'))
-        message['Subject'] = "Ihr Termin im Testzentrum des Odenwaldkreis am %s wurde storniert" % (str(date))
-        message['From'] = "Testzentrum des DRK Odenwaldkreis" + f' <{FROM_EMAIL}>'
+        message['Subject'] = "Ihr Termin im Impfpasszentrum des Odenwaldkreis am %s wurde storniert" % (str(date))
+        message['From'] = "Impfpasszentrum Odenwaldkreis" + f' <{FROM_EMAIL}>'
         message['Reply-To'] = FROM_EMAIL
         message['To'] = recipient
         smtp = smtplib.SMTP(SMTP_SERVER, port=587)
@@ -126,17 +126,42 @@ def send_cancel_appointment(recipient, date, vorname, nachname):
             "The following error occured in send mail reminder: %s" % (err))
         return False
 
-def send_mail_reminder(recipient, date, vorname, nachname, appointment, url, filename):
+def send_linked_certificate(vorname, nachname, mail, date, link):
+    try:
+        logging.debug("Receviced the following recipient %s" % (mail))
+        message = EmailMessage()
+        text = "Hallo %s %s, \nSie waren am %s im Impfpasszentrum und haben sich Ihren Impfpass digitalisieren lassen. Die Codes sind zum Abruf bereit. \nDiese können zusammen mit Ihrem Geburtsdatum über den folgenden Link abgerufen werden: \n \n%s \n \nBitte beachten Sie: Der Link ist individuell nur für die Person in der Ansprache. Sofern Sie für mehrere \nPersonen die gleiche Mailadresse eingegeben haben bekommen Sie individuelle Mails für jede Person. \nViele Grüße \nTestteam Odenwaldkreis \n\n\n----------------ENGLISH------------\nYou were at one of our testing centers. \nYour result can be received by following the link above together with your date of birth." %(vorname,nachname,date,link)
+        message.set_content(text)
+        message['Subject'] = "Impfpasszertifikate können heruntergeladen werden"
+        message['From'] = "Impfpasszentrum Odenwaldkreis" + f' <{FROM_EMAIL}>'
+        message['Reply-To'] = FROM_EMAIL
+        message['To'] = mail
+        logging.debug("Starting SMTP Connection")
+        smtp = smtplib.SMTP(SMTP_SERVER, port=587)
+        smtp.starttls()
+        smtp.login(SMTP_USERNAME, SMTP_PASSWORD)
+        if simulationMode == 0:
+            logging.debug("Going to send message")
+            smtp.send_message(message)
+            logging.debug("Mail was send")
+        smtp.quit()
+        return True
+    except Exception as err:
+        logging.error(
+            "The following error occured in send negative mail: %s" % (err))
+        return False
+
+def send_mail_reminder(recipient, date, vorname, nachname, appointment, ort, filename, url):
     try:
         logging.debug("Receviced the following recipient: %s to be sent to." % (
             recipient))
         message = MIMEMultipart()
         with open('../utils/MailLayout/Reminder.html', encoding='utf-8') as f:
             fileContent = f.read()
-        messageContent = fileContent.replace('[[DATE]]', date.strftime("%d.%m.%Y")).replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]', str(nachname)).replace('[[SLOT]]', str(appointment)).replace('[[LINK]]', str(url))
+        messageContent = fileContent.replace('[[DATE]]', date.strftime("%d.%m.%Y")).replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]', str(nachname)).replace('[[SLOT]]', str(appointment)).replace('[[LINK]]', str(url)).replace('[[ORT]]', str(ort))
         message.attach(MIMEText(messageContent, 'html'))
-        message['Subject'] = "Erinnerung an Termin %s im Testzentrum des Odenwaldkreis am %s zur Digitalisierung des Impfnachweises" % (str(appointment), str(date))
-        message['From'] = "Testzentrum des DRK Odenwaldkreis" + f' <{FROM_EMAIL}>'
+        message['Subject'] = "Erinnerung an Termin %s im Impfpasszentrum Odenwaldkreis am %s zur Digitalisierung des Impfnachweises" % (str(appointment), str(date))
+        message['From'] = "Impfpasszentrum Odenwaldkreis" + f' <{FROM_EMAIL}>'
         message['Reply-To'] = FROM_EMAIL
         message['To'] = recipient
         files = [filename]
@@ -170,9 +195,9 @@ def send_qr_ticket_mail(recipient, date, vorname, nachname, appointment, ort, fi
         with open('../utils/MailLayout/QRTicket.html', encoding='utf-8') as f:
             fileContent = f.read()
         messageContent = fileContent.replace('[[DATE]]', date.strftime("%d.%m.%Y")).replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]', str(nachname)).replace('[[SLOT]]', str(appointment)).replace('[[LINK]]', str(url)).replace('[[ORT]]', str(ort))
-        message['Subject'] = "Persönlicher Termin um %s im Testzentrum des Odenwaldkreis am %s zur Digitalisierung des Impfnachweises" % (str(appointment), str(date))
+        message['Subject'] = "Persönlicher Termin um %s im Impfpasszentrum Odenwaldkreis am %s zur Digitalisierung des Impfnachweises" % (str(appointment), str(date))
         message.attach(MIMEText(messageContent, 'html'))
-        message['From'] = "Testzentrum des DRK Odenwaldkreis" + f' <{FROM_EMAIL}>'
+        message['From'] = "Testzentrum Odenwaldkreis" + f' <{FROM_EMAIL}>'
         message['Reply-To'] = FROM_EMAIL
         message['To'] = recipient
         files = [filename]
@@ -210,7 +235,7 @@ def send_mail_download_sheet(filename, requester):
         messageContent = fileContent.replace('[[LINK]]', str(url))
         message.attach(MIMEText(messageContent, 'html'))        
         message['Subject'] = "Neuer Download verfügbar"
-        message['From'] = "Testzentrum des DRK Odenwaldkreis" + f' <{FROM_EMAIL}>'
+        message['From'] = "Impfpasszentrum Odenwaldkreis" + f' <{FROM_EMAIL}>'
         message['To'] = requester
         smtp = smtplib.SMTP(SMTP_SERVER,port=587)
         smtp.starttls()
@@ -236,7 +261,7 @@ def send_mail_download_certificate(filename, token, requester):
         messageContent = fileContent.replace('[[LINK]]', str(url))
         message.attach(MIMEText(messageContent, 'html'))        
         message['Subject'] = "Neuer Download verfügbar"
-        message['From'] = "Testzentrum des DRK Odenwaldkreis" + f' <{FROM_EMAIL}>'
+        message['From'] = "Impfpasszentrum Odenwaldkreis" + f' <{FROM_EMAIL}>'
         message['To'] = requester
         smtp = smtplib.SMTP(SMTP_SERVER,port=587)
         smtp.starttls()
