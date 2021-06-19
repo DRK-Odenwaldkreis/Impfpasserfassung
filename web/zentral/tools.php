@@ -150,7 +150,7 @@ function S_set_transfer_person_prereg ($Db,$token,$station_id) {
 			'.$station_id.'
 		);');
 
-		//S_set_data($Db,'UPDATE Voranmeldung SET Used=1 WHERE Token=\''.$token.'\';');
+		S_set_data($Db,'UPDATE Voranmeldung SET Used=1 WHERE Token=\''.$token.'\';');
 		$rowid=S_get_entry($Db,'SELECT id FROM Vorgang WHERE Vorname=\''.$array_data[1].'\' AND Nachname=\''.$array_data[2].'\' AND Wohnort=\''.$array_data[3].'\' AND Adresse=\''.$array_data[4].'\' AND Mailadresse=\''.$array_data[5].'\' AND Geburtsdatum=\''.$array_data[6].'\'');
 		return $rowid;
 	} else {

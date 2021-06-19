@@ -74,6 +74,10 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
 
     
     
+  } elseif( isset($_GET['deldoc']) && isset($_GET['id']) ) {
+    $doc_id=A_sanitize_input($_GET['deldoc']);
+    $v_id=A_sanitize_input($_GET['id']);
+    S_set_data($Db,'DELETE FROM Nachweise WHERE id=CAST('.$doc_id.' as int) AND Vorgangs_id=CAST('.$v_id.' as int);');
   }
 
   if( isset($_GET['id']) || ( isset($_POST['upload_file']) && isset($_POST['person_id']) ) ) {
@@ -118,10 +122,10 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
       <a class="list-group-item list-group-item-action" href="https://www.impfpass-odw.de/zentral/download.php?db='.$d[0].'"><span class="icon-file"></span>&nbsp;'.$d[1].'</a>
       </td>
       <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
-      <span class="text-sm">'.$d[2].'</span>
+      <span class="FAIR-text-med">'.$d[2].'</span>
       </td>
       <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
-      <a class="list-group-item list-group-item-action" href=""><span class="icon-remove2"></span>&nbsp;Löschen (inaktiv)</a>
+      <a class="list-group-item list-group-item-action" href="'.$current_site.'.php?id='.$v_id.'&deldoc='.$d[0].'"><span class="icon-remove2"></span>&nbsp;Löschen</a>
       </td>
       </tr>';
     }
