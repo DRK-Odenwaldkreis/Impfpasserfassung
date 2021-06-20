@@ -31,18 +31,23 @@ if __name__ == "__main__":
             DatabaseConnect = Database()
             sql = "Select Vorname,Nachname,Adresse,Wohnort,Geburtsdatum from Vorgang where id=%s;"%(id)
             requester = DatabaseConnect.read_single(sql)
-            vorname = requester[0]
-            nachname = requester[1]
-            adresse = requester[2]
-            ort = requester[3]
-            geburtsdatum = requester[4]
-            inputFile = open(template, 'rb')
-            document = Document(inputFile)
-            inputFile.close()
-            for paragraph in document.paragraphs:
-                paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(adresse)).replace('[[ADRESSE]]',str(geburtsdatum)).replace('[[ORT]]',str(ort))
-            outputFileWord = "../../Zertifikate/" + str(id) + ".docx" 
-            document.save(outputFileWord)
+            if requester:
+                vorname = requester[0]
+                nachname = requester[1]
+                adresse = requester[2]
+                ort = requester[3]
+                geburtsdatum = requester[4]
+                logger.debug('Opening template file')
+                inputFile = open(template, 'rb')
+                document = Document(inputFile)
+                inputFile.close()
+                for paragraph in document.paragraphs:
+                    paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(adresse)).replace('[[ADRESSE]]',str(geburtsdatum)).replace('[[ORT]]',str(ort))
+                outputFileWord = "../../Zertifikate/" + str(id) + ".docx" 
+                document.save(outputFileWord)
+                print(str(id) + ".docx")
+            else:
+                logger.error("id does not exist")
             logger.info('Done')
     except Exception as e:
         logging.error("The following error occured: %s" % (e))
