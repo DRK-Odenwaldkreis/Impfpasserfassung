@@ -42,7 +42,7 @@ if __name__ == "__main__":
                 document = Document(inputFile)
                 inputFile.close()
                 for paragraph in document.paragraphs:
-                    paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(adresse)).replace('[[ADRESSE]]',str(geburtsdatum)).replace('[[ORT]]',str(ort))
+                    paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(geburtsdatum)).replace('[[ADRESSE]]',str(adresse)).replace('[[ORT]]',str(ort))
                 outputFileWord = "../../Zertifikate/" + str(id) + ".docx" 
                 document.save(outputFileWord)
                 print(str(id) + ".docx")
