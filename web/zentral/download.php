@@ -62,6 +62,7 @@ if( A_checkpermission(array(0,2,0,4,5)) ) {
                 }
             }
         } elseif(isset($_GET['db'])) {
+            // PDF files from database
             $id=A_sanitize_input($_GET['db']);
             // Open database connection
             $Db=S_open_db();
@@ -76,6 +77,28 @@ if( A_checkpermission(array(0,2,0,4,5)) ) {
             echo base64_decode($pdf_content);
             //echo $pdf_content;
             exit;
+        } elseif(isset($_GET['ab'])) {
+            // Aufklärungsbogen
+            $id=A_sanitize_input($_GET['ab']);
+            // Build file
+            $dir="/home/webservice_impf/Impfpasserfassung/AufklaerungsbogenJob/";
+            chdir($dir);
+            $job="python3 job.py $id";
+            exec($job,$script_output);
+            $dir="/home/webservice_impf/Zertifikate";
+            $file=$script_output[0];
+            //var_dump($script_output);
+            
+            if( file_exists("$dir/$file") ) {
+                //header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename="'.basename($file).'"');
+                header('Pragma: no-cache');
+                header('Expires: 0');
+                //header('Content-Length: ' . filesize($file));
+                readfile("$dir/$file");
+                exit;
+            }
         }
     }
 } else {

@@ -119,7 +119,7 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
       echo '
       <tr>
       <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
-      <a class="list-group-item list-group-item-action" href="https://www.impfpass-odw.de/zentral/download.php?db='.$d[0].'"><span class="icon-file"></span>&nbsp;'.$d[1].'</a>
+      <a class="list-group-item list-group-item-action" href="download.php?db='.$d[0].'"><span class="icon-file"></span>&nbsp;'.$d[1].'</a>
       </td>
       <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
       <span class="FAIR-text-med">'.$d[2].'</span>
@@ -129,6 +129,18 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
       </td>
       </tr>';
     }
+    // Aufklärungsbogen
+    echo '
+      <tr>
+      <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
+      <a class="list-group-item list-group-item-action" href="download.php?ab='.$d[0].'"><span class="icon-file"></span>&nbsp;Aufklärungsbogen</a>
+      </td>
+      <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
+      </td>
+      <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
+      </td>
+      </tr>';
+
     echo '</tbody></table>';
 
     // ///////////////
