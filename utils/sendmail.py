@@ -126,11 +126,11 @@ def send_cancel_appointment(recipient, date, vorname, nachname):
             "The following error occured in send mail reminder: %s" % (err))
         return False
 
-def send_linked_certificate(vorname, nachname, mail, date, link):
+def send_linked_certificates(vorname, nachname, mail, date, link):
     try:
         logging.debug("Receviced the following recipient %s" % (mail))
         message = EmailMessage()
-        text = "Hallo %s %s, \nSie waren am %s im Impfpasszentrum und haben sich Ihren Impfpass digitalisieren lassen. Die Codes sind zum Abruf bereit. \nDiese können zusammen mit Ihrem Geburtsdatum über den folgenden Link abgerufen werden: \n \n%s \n \nBitte beachten Sie: Der Link ist individuell nur für die Person in der Ansprache. Sofern Sie für mehrere \nPersonen die gleiche Mailadresse eingegeben haben bekommen Sie individuelle Mails für jede Person. \nViele Grüße \nTestteam Odenwaldkreis \n\n\n----------------ENGLISH------------\nYou were at one of our testing centers. \nYour result can be received by following the link above together with your date of birth." %(vorname,nachname,date,link)
+        text = "Hallo %s %s, \nSie waren am %s im Impfpasszentrum und haben sich Ihren Impfpass digitalisieren lassen. Es gibt neue Unterlagen in Ihrer Akte. \nDiese können zusammen mit Ihrem Geburtsdatum über den folgenden Link abgerufen werden: \n \n%s \n \nBitte beachten Sie: Der Link ist individuell nur für die Person in der Ansprache. Sofern Sie für mehrere \nPersonen die gleiche Mailadresse eingegeben haben bekommen Sie individuelle Mails für jede Person. \nViele Grüße \Impfpasszentrum Odenwaldkreis \n\n\n----------------ENGLISH------------\nYou were at one of our testing centers. \nThere are new files you can download by following the link above together with your date of birth." %(vorname,nachname,date,link)
         message.set_content(text)
         message['Subject'] = "Impfpasszertifikate können heruntergeladen werden"
         message['From'] = "Impfpasszentrum Odenwaldkreis" + f' <{FROM_EMAIL}>'

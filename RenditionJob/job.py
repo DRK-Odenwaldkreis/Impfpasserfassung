@@ -24,10 +24,10 @@ if __name__ == "__main__":
         if len(sys.argv) == 2:
             logger.debug('Input parameters are with station id')
             stationID = sys.argv[1]
-            sql = "Select from Vorgang where privateMail_request=1 and Ergebnis != 5 and ((privateMail_lock < 10 and privateMail_lock != 0) or privateMail_lock is NULL) and Teststation = %s;" % (stationID)
+            sql = "Select Vorname, Nachname, Mailadresse, Registrierungszeitpunkt,id,customer_key,privateMail_lock from Vorgang where privateMail_request=1 and ((privateMail_lock < 10 and privateMail_lock != 0) or privateMail_lock is NULL) and Teststation = %s;" % (stationID)
         else:
             logger.debug('Checking all stations')
-            sql = "Select from Vorgang where privateMail_request=1 and docs_complete = 1 and ((privateMail_lock < 10 and privateMail_lock != 0) or privateMail_lock is NULL);"
+            sql = "Select Vorname, Nachname, Mailadresse, Registrierungszeitpunkt,id,customer_key,privateMail_lock from Vorgang where privateMail_request=1 and ((privateMail_lock < 10 and privateMail_lock != 0) or privateMail_lock is NULL);"
         DatabaseConnect = Database()
         logger.debug('Checking for new results, using the following query: %s' % (sql))
         content = DatabaseConnect.read_all(sql)
@@ -40,11 +40,10 @@ if __name__ == "__main__":
                     vorname = i[0]
                     nachname = i[1]
                     mail = i[2]
-                    result = i[3]
-                    date = i[4].strftime("%d.%m.%Y um %H:%M Uhr")
-                    testID = i[5]
-                    customer_key = i[6]
-                    mail_lock = i[7]
+                    date = i[3].strftime("%d.%m.%Y um %H:%M Uhr")
+                    id = i[4]
+                    customer_key = i[5]
+                    mail_lock = i[6]
                     if mail_lock is None:
                         mail_lock=0
                     link = "https://www.impfpass-odw.de/result.php?t=%s&i=%s" %(customer_key,id)
@@ -52,11 +51,11 @@ if __name__ == "__main__":
                     logger.debug('Checking whether mail was send properly and closing db entry')
                     if transmission:
                         logger.debug('Mail was succesfully send, closing entry in db')
-                        sql = "Update Vorgang SET privateMail_lock=0 WHERE id = %s;" % (testID)
+                        sql = "Update Vorgang SET privateMail_lock=0 WHERE id = %s;" % (id)
                         DatabaseConnect.update(sql)
                     else:
                         mail_lock +=1
-                        sql = "Update Vorgang SET privateMail_lock = %s WHERE id = %s;" % (mail_lock,testID)
+                        sql = "Update Vorgang SET privateMail_lock = %s WHERE id = %s;" % (mail_lock,id)
                         DatabaseConnect.update(sql)
                 except Exception as e:
                     logging.error("The following error occured in loop of content: %s" % (e))
