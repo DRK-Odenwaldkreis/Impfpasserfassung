@@ -133,7 +133,7 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
     echo '
       <tr>
       <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
-      <a class="list-group-item list-group-item-action" href="download.php?ab='.$d[0].'"><span class="icon-file"></span>&nbsp;Aufklärungsbogen</a>
+      <a class="list-group-item list-group-item-action" href="download.php?ab='.$v_id.'"><span class="icon-file"></span>&nbsp;Aufklärungsbogen</a>
       </td>
       <td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top">
       </td>
