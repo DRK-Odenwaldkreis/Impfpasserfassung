@@ -6,8 +6,8 @@
 import datetime
 from os import path
 import logging
-import docx2pdf
 from docx import Document 
+import subprocess
 import codecs
 import sys
 sys.path.append("..")
@@ -46,7 +46,8 @@ if __name__ == "__main__":
                     paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(geburtsdatum)).replace('[[ADRESSE]]',str(adresse)).replace('[[ORT]]',str(ort)).replace('[[DATE]]',str(date))
                 outputFileWord = "../../Zertifikate/" + str(id) + ".docx" 
                 document.save(outputFileWord)
-                print(str(id) + ".docx")
+                output = subprocess.run(['libreoffice', '--convert-to', 'pdf' ,'../../Zertifikate/' + str(id) + ".docx"])
+                print(str(id) + ".pdf")
             else:
                 logger.error("id does not exist")
             logger.info('Done')
