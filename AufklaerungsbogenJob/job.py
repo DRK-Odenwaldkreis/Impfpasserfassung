@@ -29,7 +29,7 @@ if __name__ == "__main__":
         else:
             id = sys.argv[1]
             DatabaseConnect = Database()
-            sql = "Select Vorname,Nachname,Adresse,Wohnort,Geburtsdatum from Vorgang where id=%s;"%(id)
+            sql = "Select Vorname,Nachname,Adresse,Wohnort,Geburtsdatum,Registrierungszeitpunkt from Vorgang where id=%s;"%(id)
             requester = DatabaseConnect.read_single(sql)
             if requester:
                 vorname = requester[0]
@@ -37,12 +37,13 @@ if __name__ == "__main__":
                 adresse = requester[2]
                 ort = requester[3]
                 geburtsdatum = requester[4]
+                date = requester[5].strftime("%d.%m.%Y")
                 logger.debug('Opening template file')
                 inputFile = open(template, 'rb')
                 document = Document(inputFile)
                 inputFile.close()
                 for paragraph in document.paragraphs:
-                    paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(geburtsdatum)).replace('[[ADRESSE]]',str(adresse)).replace('[[ORT]]',str(ort))
+                    paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(geburtsdatum)).replace('[[ADRESSE]]',str(adresse)).replace('[[ORT]]',str(ort)).replace('[[DATE]]',str(date))
                 outputFileWord = "../../Zertifikate/" + str(id) + ".docx" 
                 document.save(outputFileWord)
                 print(str(id) + ".docx")
