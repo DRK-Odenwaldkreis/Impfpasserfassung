@@ -20,7 +20,7 @@ include_once 'auth.php';
 
 // role check
 $bool_no_permission=false;
-if( A_checkpermission(array(0,2,0,4,5)) ) {
+if( A_checkpermission(array(1,2,0,4,5)) ) {
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if(isset($_GET['dir'])) {

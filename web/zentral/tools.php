@@ -132,8 +132,9 @@ function S_set_transfer_person_prereg ($Db,$token,$station_id) {
 	$array_data=$array_data_pre[0];
 	if($array_data[10]==NULL) {$array_data[10]=0;}
 	if($array_data[0]>0) {
+		$k_customer_key=A_generate_token(32);
 		S_set_data($Db,'INSERT INTO Vorgang 
-		(Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Erstimpfstoff_id, Zweitimpfstoff_id, reg_type, Teststation) 
+		(Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Erstimpfstoff_id, Zweitimpfstoff_id, reg_type, Teststation, Customer_key,privateMail_request) 
 		VALUES 
 		(
 			\''.$array_data[1].'\',
@@ -147,7 +148,9 @@ function S_set_transfer_person_prereg ($Db,$token,$station_id) {
 			'.$array_data[9].',
 			NULLIF('.$array_data[10].',0),
 			\'PREREG\',
-			'.$station_id.'
+			'.$station_id.',
+			\''.$k_customer_key.'\',
+			1
 		);');
 
 		S_set_data($Db,'UPDATE Voranmeldung SET Used=1 WHERE Token=\''.$token.'\';');
@@ -425,7 +428,13 @@ function H_build_table_testdates_all($mode) {
 				$res.='<td class="FAIR-data-height2 FAIR-data-right FAIR-data-left FAIR-data-bottom FAIR-data-top FAIR-data-yellow2">'.$string_location.$display_location_thirdline.'</td>';
 				for($j=0;$j<=$X;$j++) {
 					$in_j_days=date('Y-m-d', strtotime($yesterday. ' + '.$j.' days'));
-					$array_termine_open=S_get_multientry($Db,'SELECT count(id), count(Used) FROM Termine WHERE Slot>0 AND id_station='.$st[0].' AND Date(Tag)="'.$in_j_days.'";');
+					if($j==1) {
+						// TODAY do not show past entries
+						$current_hour=date('G');
+						$array_termine_open=S_get_multientry($Db,'SELECT count(id), count(Used) FROM Termine WHERE Slot>0 AND id_station='.$st[0].' AND Date(Tag)="'.$in_j_days.'" AND Stunde>='.$current_hour.';');
+					} else {
+						$array_termine_open=S_get_multientry($Db,'SELECT count(id), count(Used) FROM Termine WHERE Slot>0 AND id_station='.$st[0].' AND Date(Tag)="'.$in_j_days.'";');
+					}
 					$count_free=$array_termine_open[0][0]-$array_termine_open[0][1];
 					if( ($count_free/$array_termine_open[0][0])<0.1 ) {
 						$label_free='default';
