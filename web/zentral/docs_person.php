@@ -89,7 +89,11 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
     }
     
     // Get data
-    $array_vorgang=S_get_multientry($Db,'SELECT id,Teststation,0, Registrierungszeitpunkt,Vorname,Nachname,Geburtsdatum,Adresse,Wohnort,0,Mailadresse,Erstimpfstoff_id, Zweitimpfstoff_id, Erstimpfung, Zweitimpfung FROM Vorgang WHERE id=CAST('.$v_id.' AS int);');
+    $array_vorgang=S_get_multientry($Db,'SELECT Vorgang.id,Vorgang.Teststation, Vorgang.Registrierungszeitpunkt,Vorgang.Vorname,Vorgang.Nachname,Vorgang.Geburtsdatum,Vorgang.Adresse,Vorgang.Wohnort,Vorgang.Mailadresse,Impfstoff1.Name, Impfstoff2.Name, Vorgang.Erstimpfung, Vorgang.Zweitimpfung
+    FROM Vorgang 
+    LEFT OUTER JOIN Impfstoff AS Impfstoff1 ON Impfstoff1.id=Vorgang.Erstimpfstoff_id 
+    LEFT OUTER JOIN Impfstoff AS Impfstoff2 ON Impfstoff2.id=Vorgang.Zweitimpfstoff_id 
+    WHERE Vorgang.id=CAST('.$v_id.' AS int);');
     $array_docs=S_get_multientry($Db,'SELECT id,Beschreibung,Updated FROM Nachweise WHERE Vorgangs_id=CAST('.$v_id.' AS int) ORDER BY Updated DESC;');
     
 
@@ -97,7 +101,7 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
   
     echo '<div class="row">';
     echo '<div class="col-sm-12">
-    <h3>Kunden-Akte von '.$array_vorgang[0][4].' '.$array_vorgang[0][5].' - DOB '.$array_vorgang[0][6].'</h3>';
+    <h3>Kunden-Akte von '.$array_vorgang[0][3].' '.$array_vorgang[0][4].' - DOB '.$array_vorgang[0][5].'</h3>';
     echo $errorhtml1;
     echo '
     <a class="list-group-item list-group-item-action list-group-item-redtext" href="edit_person.php?id='.$v_id.'"><span class="icon-pencil"></span>&nbsp;Daten ändern</a>
@@ -110,6 +114,38 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
     // ///////////////
     echo '</div>';
     echo '<div class="col-lg-6">';
+
+    echo '
+    <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Vorn</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][3].'" disabled>
+    <span class="input-group-addon" id="basic-addon1">Nachn</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][4].'" disabled>
+    </div>
+    <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Geb</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][5].'" disabled>
+    </div>
+    <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Adresse</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][6].'" disabled>
+    <span class="input-group-addon" id="basic-addon1">Ort</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][7].'" disabled>
+    </div>
+    <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">E-Mail</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][8].'" disabled>
+    </div>
+    <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">1. Impfung</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][9].' / '.$array_vorgang[0][11].'" disabled>
+    </div>
+    <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">2. Impfung</span>
+    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" value="'.$array_vorgang[0][10].' / '.$array_vorgang[0][12].'" disabled>
+    </div>
+    ';
+
     echo '<h4>Dokumente</h4>
     <table class="FAIR-data">
     <tbody>
@@ -162,11 +198,11 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
   <input name="userfile" type="file" class="form-control" />
   <span class="input-group-addon" id="basic-addon1">Dokument-Art</span>
   <select class="custom-select" id="select-state" placeholder="Wähle..." name="doc_class">
-  <option value="" selected>Wähle...</option>
+  <option value="">Wähle...</option>
   ';
   echo '<option value="Impfbuch">Impfbuch</option>';
   echo '<option value="Impfersatzdokument">Impfersatzdokument</option>';
-  echo '<option value="Digitaler Impfnachweis">Digitaler Impfnachweis</option>';
+  echo '<option value="Digitaler Impfnachweis" selected>Digitaler Impfnachweis</option>';
   echo '
   </select>
   </div><div class="input-group">

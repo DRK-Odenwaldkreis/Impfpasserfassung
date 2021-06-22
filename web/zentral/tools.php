@@ -132,8 +132,9 @@ function S_set_transfer_person_prereg ($Db,$token,$station_id) {
 	$array_data=$array_data_pre[0];
 	if($array_data[10]==NULL) {$array_data[10]=0;}
 	if($array_data[0]>0) {
+		$k_customer_key=A_generate_token(32);
 		S_set_data($Db,'INSERT INTO Vorgang 
-		(Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Erstimpfstoff_id, Zweitimpfstoff_id, reg_type, Teststation) 
+		(Vorname, Nachname, Wohnort, Adresse, Mailadresse, Geburtsdatum, Erstimpfung, Zweitimpfung, Erstimpfstoff_id, Zweitimpfstoff_id, reg_type, Teststation, Customer_key,privateMail_request) 
 		VALUES 
 		(
 			\''.$array_data[1].'\',
@@ -147,7 +148,9 @@ function S_set_transfer_person_prereg ($Db,$token,$station_id) {
 			'.$array_data[9].',
 			NULLIF('.$array_data[10].',0),
 			\'PREREG\',
-			'.$station_id.'
+			'.$station_id.',
+			\''.$k_customer_key.'\',
+			1
 		);');
 
 		S_set_data($Db,'UPDATE Voranmeldung SET Used=1 WHERE Token=\''.$token.'\';');

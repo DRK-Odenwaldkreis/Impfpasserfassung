@@ -57,13 +57,13 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
       $k_vacdate1=$_POST['vac_date1'];
       $k_vacdate2=$_POST['vac_date2'];
       $k_station=$_SESSION['station_id'];
-
+      $k_customer_key=A_generate_token(32);
 
 
       if (filter_var($k_email, FILTER_VALIDATE_EMAIL)) {
         // New entry
-        S_set_data($Db,'INSERT INTO Vorgang (Teststation,reg_Type,Vorname,Nachname,Geburtsdatum,Adresse,Wohnort,Mailadresse,Erstimpfung,Zweitimpfung,Erstimpfstoff_id,Zweitimpfstoff_id)
-        VALUES ('.$k_station.',\'POCREG\',\''.$k_vname.'\',\''.$k_nname.'\',\''.$k_geb.'\',\''.$k_adresse.'\',\''.$k_ort.'\',\''.$k_email.'\',\''.$k_vacdate1.'\',NULLIF(\''.$k_vacdate2.'\',""),'.$k_vactype1.',NULLIF('.$k_vactype2.',0));');
+        S_set_data($Db,'INSERT INTO Vorgang (Teststation,reg_Type,Vorname,Nachname,Geburtsdatum,Adresse,Wohnort,Mailadresse,Erstimpfung,Zweitimpfung,Erstimpfstoff_id,Zweitimpfstoff_id,Customer_key,privateMail_request)
+        VALUES ('.$k_station.',\'POCREG\',\''.$k_vname.'\',\''.$k_nname.'\',\''.$k_geb.'\',\''.$k_adresse.'\',\''.$k_ort.'\',\''.$k_email.'\',\''.$k_vacdate1.'\',NULLIF(\''.$k_vacdate2.'\',""),'.$k_vactype1.',NULLIF('.$k_vactype2.',0),\''.$k_customer_key.'\',1);');
 
         // check saving
         $check_id=S_get_entry($Db,'SELECT id FROM Vorgang
@@ -102,8 +102,8 @@ if( A_checkpermission(array(1,2,0,4,5)) ) {
         
       } else {
         // New entry
-        S_set_data($Db,'INSERT INTO Vorgang (Teststation,reg_Type,Vorname,Nachname,Geburtsdatum,Adresse,Wohnort,Erstimpfung,Zweitimpfung,Erstimpfstoff_id,Zweitimpfstoff_id)
-        VALUES ('.$k_station.',\'POCREG\',\''.$k_vname.'\',\''.$k_nname.'\',\''.$k_geb.'\',\''.$k_adresse.'\',\''.$k_ort.'\',\''.$k_vacdate1.'\',NULLIF(\''.$k_vacdate2.'\',""),'.$k_vactype1.',NULLIF('.$k_vactype2.',0));');
+        S_set_data($Db,'INSERT INTO Vorgang (Teststation,reg_Type,Vorname,Nachname,Geburtsdatum,Adresse,Wohnort,Erstimpfung,Zweitimpfung,Erstimpfstoff_id,Zweitimpfstoff_id,Customer_key)
+        VALUES ('.$k_station.',\'POCREG\',\''.$k_vname.'\',\''.$k_nname.'\',\''.$k_geb.'\',\''.$k_adresse.'\',\''.$k_ort.'\',\''.$k_vacdate1.'\',NULLIF(\''.$k_vacdate2.'\',""),'.$k_vactype1.',NULLIF('.$k_vactype2.',0),\''.$k_customer_key.'\');');
         // check saving
         $check_id=S_get_entry($Db,'SELECT id FROM Vorgang 
         WHERE Vorname=\''.$k_vname.'\' AND
