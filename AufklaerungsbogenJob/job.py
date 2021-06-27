@@ -4,7 +4,7 @@
 # This file is part of DRK Testzentrum.
 
 import datetime
-from os import path
+from os import SCHED_RESET_ON_FORK, path
 import logging
 from docx import Document 
 import subprocess
@@ -46,7 +46,7 @@ if __name__ == "__main__":
                     paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(geburtsdatum)).replace('[[ADRESSE]]',str(adresse)).replace('[[ORT]]',str(ort)).replace('[[DATE]]',str(date))
                 outputFileWord = "../../Zertifikate/" + str(id) + ".docx" 
                 document.save(outputFileWord)
-                output = subprocess.Popen(['libreoffice', '--convert-to', 'pdf' ,'../../Zertifikate/' + str(id) + ".docx", '--outdir', '../../Zertifikate'])
+                output = subprocess.call(['libreoffice', '--headless', '--convert-to', 'pdf' ,'../../Zertifikate/' + str(id) + ".docx", '--outdir', '../../Zertifikate'],stdout=subprocess.PIPE)
                 print(str(id) + ".pdf")
             else:
                 logger.error("id does not exist")
