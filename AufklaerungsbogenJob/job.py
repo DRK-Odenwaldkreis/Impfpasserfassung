@@ -46,8 +46,8 @@ if __name__ == "__main__":
                     paragraph.text = paragraph.text.replace('[[VORNAME]]', str(vorname)).replace('[[NACHNAME]]',str(nachname)).replace('[[GEBDATUM]]',str(geburtsdatum)).replace('[[ADRESSE]]',str(adresse)).replace('[[ORT]]',str(ort)).replace('[[DATE]]',str(date))
                 outputFileWord = "../../Zertifikate/" + str(id) + ".docx" 
                 document.save(outputFileWord)
-                output = subprocess.call(['libreoffice', '--headless', '--convert-to', 'pdf' ,'../../Zertifikate/' + str(id) + ".docx", '--outdir', '../../Zertifikate'],stdout=subprocess.PIPE)
-                print(str(id) + ".pdf")
+                #output = subprocess.call(['libreoffice', '--headless', '--convert-to', 'pdf' ,'../../Zertifikate/' + str(id) + ".docx", '--outdir', '../../Zertifikate'],stdout=subprocess.PIPE)
+                print(str(id) + ".docx")
             else:
                 logger.error("id does not exist")
             logger.info('Done')
